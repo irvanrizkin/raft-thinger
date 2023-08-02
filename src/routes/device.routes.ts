@@ -6,3 +6,5 @@ const deviceController = new DeviceController();
 export const deviceRouter = Router();
 
 deviceRouter.get('/', deviceController.list);
+
+deviceRouter.post('/', deviceController.add);
