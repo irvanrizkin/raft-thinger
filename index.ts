@@ -5,6 +5,8 @@ import cors from 'cors'
 import { ErrorHandler } from "./src/utils/ErrorHandler";
 import { CustomError } from "./src/utils/CustomError";
 
+import { deviceRouter } from "./src/routes/device.routes";
+
 const app = express();
 
 app.use(cors());
@@ -19,6 +21,8 @@ app.get('/', (req: Request, res: Response) => {
     }
   )
 });
+
+app.use('/devices', deviceRouter);
 
 app.use(ErrorHandler.handleError);
 
