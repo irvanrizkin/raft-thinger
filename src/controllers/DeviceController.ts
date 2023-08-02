@@ -43,4 +43,32 @@ export class DeviceController extends Controller {
       next(error);
     }
   }
+
+  remove = async (req: Request, res: Response, next: NextFunction) => {
+    const { id } = req.params;
+
+    try {
+      const { data } = await this.supabase.from('devices')
+        .select()
+        .eq('id', id)
+        .limit(1)
+        .single();
+
+      if (!data) throw new CustomError('device not found for deletion', 404);
+
+      const { error } = await this.supabase.from('devices')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw new Error(error.message);
+
+      return res.status(204).json({
+        status: true,
+        message: 'device removed successfully',
+        results: data,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
