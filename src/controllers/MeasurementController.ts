@@ -30,8 +30,23 @@ export class MeasurementController extends Controller {
 
   listByPeriod = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params;
+    const { period } = req.query;
 
     try {
+      if (period) {
+        const procedure = this.getProcedureFromPeriod(period.toString());
+
+        const { data, error, status } = await this.listAverageByPeriod(id, procedure);
+
+        if (error) throw new CustomError(error.message, status);
+
+        return res.status(200).json({
+          status: true,
+          message: 'measurement sampled ${period} listed successfully',
+          results: data,
+        });
+      }
+      
       const { data, error, status } = await this.listLatest30Min(id);
 
       if (error) throw new CustomError(error.message, status);
@@ -52,5 +67,24 @@ export class MeasurementController extends Controller {
       .eq('deviceId', deviceId)
       .gte('createdAt', sub(new Date(), { minutes: 30 }).toISOString())
       .order('createdAt');
+  }
+
+  private listAverageByPeriod = async (
+    deviceId: string,
+    procedure: "get_daily_sample" | "get_weekly_sample",
+  ) => {
+    return await this.supabase.rpc(procedure, {
+      p_deviceid: deviceId,
+    });
+  }
+
+  private getProcedureFromPeriod(period: string) {
+    if (period === '1d') {
+      return "get_daily_sample";
+    }
+    if (period === '1w') {
+      return "get_weekly_sample";
+    }
+    throw new Error("Invalid period value. Only '1d' or '1w' are supported.");
   }
 }
