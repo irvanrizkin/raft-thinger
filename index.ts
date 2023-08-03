@@ -3,7 +3,6 @@ import express, { Request, Response } from "express";
 import cors from 'cors'
 
 import { ErrorHandler } from "./src/utils/ErrorHandler";
-import { CustomError } from "./src/utils/CustomError";
 
 import { deviceRouter } from "./src/routes/device.routes";
 import { measurementRouter } from "./src/routes/measurement.routes";
