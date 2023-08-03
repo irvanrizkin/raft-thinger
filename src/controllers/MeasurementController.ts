@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { Controller } from "./Controller";
 import { CustomError } from "../utils/CustomError";
-import { error } from "console";
 import { sub } from "date-fns";
 
 export class MeasurementController extends Controller {
@@ -46,7 +45,7 @@ export class MeasurementController extends Controller {
           results: data,
         });
       }
-      
+
       const { data, error, status } = await this.listLatest30Min(id);
 
       if (error) throw new CustomError(error.message, status);
