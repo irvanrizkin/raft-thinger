@@ -7,6 +7,7 @@ import { CustomError } from "./src/utils/CustomError";
 
 import { deviceRouter } from "./src/routes/device.routes";
 import { measurementRouter } from "./src/routes/measurement.routes";
+import { actionRouter } from "./src/routes/action.routes";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/devices', deviceRouter);
 app.use('/measurements', measurementRouter);
+app.use('/actions', actionRouter);
 
 app.use(ErrorHandler.handleError);
 
