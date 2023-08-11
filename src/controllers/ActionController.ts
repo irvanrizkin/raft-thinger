@@ -32,6 +32,12 @@ export class ActionController extends Controller {
         },
       });
 
+      await this.supabase.from('logs')
+        .insert({
+          summary: `valve opened on ${id} for ${flow} ml`,
+          source: 'thinger'
+        });
+
       return res.status(200).json({
         status: true,
         message: 'open valve command sent successfully by thinger',

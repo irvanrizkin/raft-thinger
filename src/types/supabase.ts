@@ -33,6 +33,27 @@ export interface Database {
         }
         Relationships: []
       }
+      logs: {
+        Row: {
+          created_at: string
+          id: number
+          source: string | null
+          summary: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          source?: string | null
+          summary?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          source?: string | null
+          summary?: string | null
+        }
+        Relationships: []
+      }
       measurements: {
         Row: {
           createdAt: string | null
