@@ -24,19 +24,19 @@ export class ActionController extends Controller {
 
       if (!url) throw new CustomError('null url on device', 400);
 
-      const response = await axios.post(url, flow, {
+      await this.supabase.from('logs')
+        .insert({
+          summary: `valve opened on ${id} for ${flow} ml`,
+          source: 'thinger'
+        });
+
+      await axios.post(url, flow, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json;charset=UTF-8',
           'Accept': 'application/json, text/plain, */*'
         },
       });
-
-      await this.supabase.from('logs')
-        .insert({
-          summary: `valve opened on ${id} for ${flow} ml`,
-          source: 'thinger'
-        });
 
       return res.status(200).json({
         status: true,
