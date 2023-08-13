@@ -26,7 +26,7 @@ export class ActionController extends Controller {
 
       await this.supabase.from('logs')
         .insert({
-          summary: `valve opened on ${id} for ${flow} ml`,
+          summary: `sending command to open valve on ${id} for ${flow} ml`,
           source: 'thinger'
         });
 
@@ -37,6 +37,12 @@ export class ActionController extends Controller {
           'Accept': 'application/json, text/plain, */*'
         },
       });
+
+      await this.supabase.from('logs')
+        .insert({
+          summary: `command to open valve on ${id} for ${flow} ml sent successfully`,
+          source: 'thinger'
+        });
 
       return res.status(200).json({
         status: true,
