@@ -4,6 +4,8 @@ import { CustomError } from "../utils/CustomError";
 import { sub } from "date-fns";
 
 export class MeasurementController extends Controller {
+  private count = 0;
+
   constructor() {
     super();
   }
@@ -12,19 +14,40 @@ export class MeasurementController extends Controller {
     const { ppm, temperature, source, deviceId } = req.body;
 
     try {
-      const { data, error, status } = await this.supabase.from('measurements')
-        .insert({ ppm, temperature, source, deviceId });
+      // const { data, error, status } = await this.supabase.from('measurements')
+      //   .insert({ ppm, temperature, source, deviceId });
 
-      if (error) throw new CustomError(error.message, status);
+      // if (error) throw new CustomError(error.message, status);
+
+      this.count++;
 
       return res.status(200).json({
         status: true,
         message: 'measurement added successfully',
-        results: data,
+        // results: data,
       });
     } catch (error) {
       next(error);
     }
+  }
+
+  read = (req: Request, res: Response) => {
+    console.log(this.count);
+
+    return res.status(200).json({
+      status: true,
+      message: 'count read',
+      results: this.count,
+    })
+  }
+
+  reset = (req: Request, res: Response) => {
+    this.count = 0
+
+    return res.status(200).json({
+      status: true,
+      message: 'count reset',
+    })
   }
 
   listByPeriod = async (req: Request, res: Response, next: NextFunction) => {
